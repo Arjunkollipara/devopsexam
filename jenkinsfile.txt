@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    environment {
+        NODE_ENV = 'production'
+    }
+
+    tools {
+        nodejs 'nodejs-14'  // Use the NodeJS version installed in Jenkins
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clone the GitHub repository
+                git 'https://github.com/shiv4j/week5'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                // Install dependencies using npm
+                script {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Run tests using npm test
+                script {
+                    sh 'npm test'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Optional: Run build if necessary
+                script {
+                    sh 'npm run build'
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                // Optional: Deploy the application to the server
+                echo "Deploying the application..."
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Build and tests passed successfully."
+        }
+        failure {
+            echo "Build or tests failed."
+        }
+    }
+}
